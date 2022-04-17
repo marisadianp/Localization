@@ -19,7 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FetchAddressTask.OnTaskCompleted {
 
     private TextView mLocationTextView;
     private Button mLocationButton;
@@ -69,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        String result = "Latitude " + String.valueOf(location.getLatitude())
-                                + "\n Longitude " + String.valueOf(location.getLongitude());
-                        mLocationTextView.setText(result);
+//                        String result = "Latitude " + String.valueOf(location.getLatitude())
+//                                + "\n Longitude " + String.valueOf(location.getLongitude());
+//                        mLocationTextView.setText(result);
+
+                        new FetchAddressTask(MainActivity.this, MainActivity.this).execute(location);
                     }
                     else {
                         mLocationTextView.setText("Location not found");
@@ -79,5 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void OnTaskCompleted(String result) {
+        mLocationTextView.setText(result);
     }
 }
